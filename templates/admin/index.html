@@ -1,0 +1,107 @@
+{% extends 'admin/base.html' %} {% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="box card-box">
+            <div class="icon-box bg-color-1">
+                <div class="icon bg-icon-5">
+                    <i class='bx bxs-user' style="font-size: 24px;"></i>
+                </div>
+                <div class="content">
+                    <h5 class="title-box">Employees</h5>
+                    <p class="color-1 mb-0 pt-4">{{emplowersCount}} Employees</p>
+                </div>
+            </div>
+            <div class="icon-box bg-color-1">
+                <div class="icon bg-icon-3">
+                    <i class='bx bxs-calendar' style="font-size: 24px;"></i>
+                </div>
+                <div class="content">
+                    <h5 class="title-box">Time Records</h5>
+                    <p class="color-1 mb-0 pt-4">{{timeRecordsCount}} Time Records</p>
+                </div>
+            </div>
+            <div class="icon-box bg-color-1">
+                <div class="icon bg-icon-2">
+                    <i class='bx bx-bell'></i>
+                </div>
+                <div class="content">
+                    <h5 class="title-box">Notifications</h5>
+                    <p class="color-1 mb-0 pt-4">{{notificationsCount}} Notifications</p>
+                </div>
+            </div>
+            <div class="icon-box bg-color-1">
+                <div class="icon bg-icon-1">
+                    <i class='bx bx-comment' style="font-size: 24px;"></i>
+                </div>
+                <div class="content">
+                    <h5 class="title-box">Admin Comments</h5>
+                    <p class="color-1 mb-0 pt-4">{{adminCommentsCount}} Admin Comments</p>
+                </div>
+            </div>
+             
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="box">
+            <center><h3>Last Records</h3></center>
+            <br>
+
+            
+            <div class="box-body">
+                <div class="table-responsive">
+                    <div id="task-profile_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table class="table table-vcenter text-nowrap table-bordered dataTable no-footer" id="task-profile" role="grid">
+                                    <thead>
+                                        <tr class="top">
+                                            <th class="border-bottom-0 text-center sorting fs-14 font-w500" tabindex="0" aria-controls="task-profile" rowspan="1" colspan="1">No</th>
+                                            <th class="border-bottom-0 sorting fs-14 font-w500" tabindex="0" aria-controls="task-profile" rowspan="1" colspan="1">Employee Name</th>
+                                            <th class="border-bottom-0 sorting fs-14 font-w500" tabindex="0" aria-controls="task-profile" rowspan="1" colspan="1">Time In</th>
+                                            <th class="border-bottom-0 sorting fs-14 font-w500" tabindex="0" aria-controls="task-profile" rowspan="1" colspan="1">Time Out</th>
+                                            <th class="border-bottom-0 sorting fs-14 font-w500" tabindex="0" aria-controls="task-profile" rowspan="1" colspan="1">Status</th>
+                                            <th class="border-bottom-0 sorting_disabled fs-14 font-w500" rowspan="1" colspan="1">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for record in last50Attend %}
+                                        <tr class="{{ loop.cycle('odd', 'even') }}">
+                                            <td class="text-center">{{ loop.index }}</td>
+                                            <td>{{ record.name }}</td>
+                                            <td>{{ record.time_in }}</td>
+                                            <td>{{ record.time_out }}</td>
+                                            <td>
+                                     
+                                                    <span class="badge badge-success">Present</span>
+
+                                           
+                                            </td>
+                                            <td>
+                                                <div class="dropdown">
+                                                    <a href="javascript:void(0);" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="bx bx-dots-horizontal-rounded"></i>
+                                                    </a>
+                                                    <div class="dropdown-menu dropdown-menu-right">
+
+                                                        <a class="dropdown-item" href="/admin/view_record/{{record.id}}" ><i class="bx bx-show mr-5"></i> View</a>
+                                                        <a class="dropdown-item" href="/admin/delete_record/{{record.id}}" ><i class="bx bx-trash mr-5"></i> Delete</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="box">
+            <div class="box-body d-flex justify-content-between pt-0 pb-0">
+                <div class="search-form d-flex">
+                    <input type="text" placeholder="Search by Name, Phone, or Email" class="form-control" id="search-input">
+                    <button type="button" class="search d-flex" id="filter-btn"><i class="fas fa-search"></i>Search</button>
+                </div>
+                <div class="list-action">
+                    <a class="list" href="#" onclick="liststyle()"><i class='bx bx-menu'></i></a>
+                    <a href="#" class="list-board active" onclick="listboard()"><i class='bx bxs-dashboard'></i></a>
+                    <a href="/admin/add_employees" class="add">Add Employee<i class="fas fa-plus-circle"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% for employee in employees %}
+    <div class="col-3 col-md-6 col-sm-12 mb-25 user-card">
+        <div class="box client">
+            <div class="dropdown">
+                <a href="javascript:void(0);" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class='bx bx-dots-horizontal-rounded'></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item delete-user" href="/admin/delete_employee/{{ employee.id }}"><i class="bx bx-trash"></i> Delete</a>
+                    <a class="dropdown-item edit-user" href="#" data-toggle="modal" data-target="#edit_employee" data-employee-id="{{ employee.id }}"><i class="bx bx-edit mr-5"></i>Edit</a>
+                </div>
+            </div>
+            <div class="box-body pt-5 pb-0">
+                <div class="img-box">
+                    <img src="https://avatar.iran.liara.run/username?username={{employee.name}}" width="100px" alt="">
+                    <div class="pulse-css"></div>
+                </div>
+                <a href=""><h5 class="mt-17">{{ employee.name }}</h5></a>
+                <p class="fs-14 font-w400 font-main">Position: <span class="text-clo-primary font-w500 pl-4">{{ employee.position }}</span></p>
+                <ul class="info">
+                    <li class="fs-14"><i class='bx bxs-phone'></i>{{ employee.mobile_phone }}</li>
+                    <li class="fs-14"><i class='bx bxs-envelope'></i>{{ employee.email }}</li>
+                </ul>
+                <div class="group-btn d-flex justify-content-between">
+                    <a class="bg-btn-sec color-main" style="width: 100%;" href="/admin/employee/{{ employee.id }}">View Profile</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<script>
+      function Fadalye() {
+    $('.list').addClass('active');
+    $('.main-content.client').addClass('list');
+    $('.list-board').removeClass('active');
+}
+
+
+function listboard() {
+    $('.list-board').addClass('active');
+    $('.main-content.client').removeClass('list');
+    $('.list').removeClass('active');
+}
+</script>
+{% endblock %}

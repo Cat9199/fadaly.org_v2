@@ -1,0 +1,330 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+<div class="messages">
+    <center>
+        {% if message %}
+        <div class="alert alert-{{ message_type }}">
+            {{ message }}
+        </div>
+        {% endif %}
+    </center>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="box">
+            <form action="/admin/add_employees" method="post">
+                <div class="box-body">
+                    <!-- Basic Information -->
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Name</label>
+                                <input class="form-control" placeholder="Enter Name" name="name">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Workplace</label>
+                                <input class="form-control" placeholder="Enter Workplace" name="workplace">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Contact Information -->
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Mobile Phone</label>
+                                <input class="form-control" placeholder="Enter Mobile Phone" name="mobile_phone">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Home Phone</label>
+                                <input class="form-control" placeholder="Enter Home Phone" name="home_phone">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Position Information -->
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Position</label>
+                                <input class="form-control" placeholder="Enter Position" name="position">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">User ID</label>
+                                <input class="form-control" placeholder="Enter User ID" name="user_id">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Personal Information -->
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Date of Birth</label>
+                                <input type="date" class="form-control" name="date_of_birth">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Gender</label>
+                                <select class="form-control custom-select" name="gender">
+                                    <option value="" selected>Select Gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Additional Information -->
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Marital Status</label>
+                                <input class="form-control" placeholder="Enter Marital Status" name="marital_status">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Nationality</label>
+                                <input class="form-control" placeholder="Enter Nationality" name="nationality">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Address Information -->
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Address</label>
+                                <textarea class="form-control" placeholder="Enter Address" rows="3" name="address"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input class="form-control" placeholder="Enter Email" name="email">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Job Information -->
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Current Job Title</label>
+                                <input class="form-control" placeholder="Enter Current Job Title" name="current_job_title">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Start Date of Current Job</label>
+                                <input type="date" class="form-control" name="start_date_current_job">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Job Duration -->
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Duration of Current Job</label>
+                                <input class="form-control" placeholder="Enter Duration of Current Job" name="duration_current_job">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Previous Jobs -->
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Previous Job Titles</label>
+                                <input class="form-control" placeholder="Enter Previous Job Titles" name="previous_job_titles">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Previous Companies</label>
+                                <input class="form-control" placeholder="Enter Previous Companies" name="previous_companies">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Previous Job Duration -->
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Duration of Previous Jobs</label>
+                                <input class="form-control" placeholder="Enter Duration of Previous Jobs" name="duration_previous_job">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Proficiency Information -->
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Autocad Proficiency</label>
+                                <input class="form-control" placeholder="Enter Autocad Proficiency" name="autocad_proficiency">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Civil 3D Proficiency</label>
+                                <input class="form-control" placeholder="Enter Civil 3D Proficiency" name="civil_3d_proficiency">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Total Station Proficiency</label>
+                                <input class="form-control" placeholder="Enter Total Station Proficiency" name="total_station_proficiency">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">GPS Proficiency</label>
+                                <input class="form-control" placeholder="Enter GPS Proficiency" name="gps_proficiency">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Technical Skills -->
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">3D Scanner Proficiency</label>
+                                <input class="form-control" placeholder="Enter 3D Scanner Proficiency" name="_3d_scanner_proficiency">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Data Transfer Software Proficiency</label>
+                                <input class="form-control" placeholder="Enter Data Transfer Software Proficiency" name="data_transfer_software_proficiency">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Languages and Skills -->
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Languages</label>
+                                <input class="form-control" placeholder="Enter Languages" name="languages">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Technical Skills</label>
+                                <input class="form-control" placeholder="Enter Technical Skills" name="technical_skills">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Personal Skills</label>
+                                <input class="form-control" placeholder="Enter Personal Skills" name="personal_skills">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Education Information -->
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Highest Education Degree</label>
+                                <input class="form-control" placeholder="Enter Highest Education Degree" name="highest_education_degree">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Field of Study</label>
+                                <input class="form-control" placeholder="Enter Field of Study" name="field_of_study">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Educational Institution</label>
+                                <input class="form-control" placeholder="Enter Educational Institution" name="educational_institution">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Graduation Year</label>
+                                <input type="date" class="form-control" name="graduation_year">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Additional Information -->
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Additional Info</label>
+                                <textarea class="form-control" placeholder="Enter Additional Info" rows="3" name="additional_info"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Bank Information -->
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Personal Bank Account Number</label>
+                                <input class="form-control" placeholder="Enter Personal Bank Account Number" name="personal_bank_account_number">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Bank Name</label>
+                                <input class="form-control" placeholder="Enter Bank Name" name="bank_name">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Wallet and Tax Information -->
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Personal Wallet Number</label>
+                                <input class="form-control" placeholder="Enter Personal Wallet Number" name="personal_wallet_number">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Tax Number</label>
+                                <input class="form-control" placeholder="Enter Tax Number" name="tax_number">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Social Security Information -->
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Social Security Number</label>
+                                <input class="form-control" placeholder="Enter Social Security Number" name="social_security_number">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Emergency Contact Information -->
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Emergency Contact Name</label>
+                                <input class="form-control" placeholder="Enter Emergency Contact Name" name="emergency_contact_name">
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12 mb-24">
+                            <div class="form-group">
+                                <label class="form-label">Emergency Contact Phone</label>
+                                <input class="form-control" placeholder="Enter Emergency Contact Phone" name="emergency_contact_phone">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Form submission buttons -->
+                    <div class="gr-btn mt-15">
+                        <a href="#" class="btn btn-danger btn-lg mr-15 fs-16">CLOSE</a>
+                        <button class="btn btn-primary btn-lg fs-16" type="submit">SUBMIT</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

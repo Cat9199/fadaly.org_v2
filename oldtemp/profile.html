@@ -1,0 +1,309 @@
+
+{% extends 'base.html' %}
+{% block content %}
+    <title>User Info Page</title>
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/Cat9199/fadalyoffice/main/images/logo-removebg-preview.png">
+    <style>
+        /* Add some basic styling to the page */
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        section {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        
+        h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .navbar {
+            background-color: #ffffff;
+            padding: 10px;
+            margin: 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .navbar-logo img {
+            width: 80px;
+        }
+        
+        .navbar-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .navbar-button {
+            display: flex;
+            align-items: center;
+        }
+        
+        .btn-danger {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+        
+        .btn-danger:focus {
+            outline: none;
+        }
+        
+        .user-info {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            grid-column-gap: 20px;
+            align-items: center;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .user-info img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center;
+        }
+        
+        .general-info-container {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .general-info-container div {
+            margin-bottom: 10px;
+        }
+        
+        .general-info-container strong {
+            font-weight: bold;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .button-link {
+            display: inline-block;
+            width: 80%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: #fff;
+            text-decoration: none;
+            text-align: center;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .button-link:hover {
+            background-color: #45a049;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        }
+        
+        .button-link:active {
+            background-color: #3e8e41;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+        }
+        
+        .button-link:focus {
+            outline: none;
+        }
+        
+        .button-link:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .button-link:disabled:hover {
+            box-shadow: none;
+        }
+        
+        .button-link .icon {
+            margin-right: 5px;
+        }
+        
+        .button-link:hover img {
+            transform: scale(1.2);
+        }
+        
+        .btn-view-detail {
+            background-color: #4C74AF;
+        }
+        
+        .btn-view-detail:hover {
+            background-color: #3b6397;
+        }
+        
+        .btn-view-detail img {
+            margin-right: 10px;
+        }
+        
+        .button-link,
+        .btn-view-detail {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* Additional styling */
+        
+        body {
+            padding: 20px;
+        }
+        
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+        }
+        
+        .navbar-title {
+            font-size: 24px;
+            margin-left: 20px;
+        }
+        
+        .user-info {
+            margin-top: 20px;
+        }
+        
+        .user-info img {
+            width: 200px;
+            height: 200px;
+        }
+        
+        .general-info-container div {
+            font-size: 18px;
+        }
+        
+        table {
+            font-size: 14px;
+        }
+        
+        .button-link {
+            font-size: 16px;
+            padding: 12px;
+            width: 100%;
+        }
+        
+        .btn-view-detail {
+            font-size: 16px;
+            padding: 12px;
+            width: 100%;
+        }
+    </style>
+</head>
+
+
+    <h1>User Info</h1>
+
+    <section>
+        <h2>General Information</h2>
+        <div class="user-info">
+            <img src="https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg" alt="Profile Image">
+            <div class="general-info-container">
+                <div>
+                    <strong>Name:</strong> {{ info.name }}
+                </div>
+                <div>
+                    <strong>User Id:</strong> {{ info.user_id }}
+                </div>
+                <div>
+                    <strong>Workplace:</strong> {{ info.Workplace }}
+                </div>
+                <div>
+                    <strong>Position:</strong> {{ info.Position }}
+                </div>
+                <div>
+                    <strong>Attendance Registrations:</strong> {{ e1 }}
+                </div>
+                <div>
+                    <strong>Departure Registrations:</strong> {{ e2 }}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Attendance Details</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Time</th>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th>View</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for x in alist %}
+                <tr>
+                    <td>{{ x.user_id }}</td>
+                    <td>{{ x.name }}</td>
+                    <td>{{ x.time }}</td>
+                    <td>{{ x.date }}</td>
+                    <td>
+                        <center>
+                            <a href="https://www.google.com/maps/place/{{ x.latitude }},{{ x.longitude }}" class="button-link">
+                                <img src="https://raw.githubusercontent.com/Cat9199/Cat9199.github.io/main/pin.png" width="15px" style="margin-right: 10px;">Location in Google Maps</a>
+                        </center>
+                    </td>
+                    <td>
+                        <center>
+                            <a href="{{ url_for('vd',id=x.id) }}" class="button-link btn-view-detail">
+                                <img src="https://raw.githubusercontent.com/Cat9199/Cat9199.github.io/main/eye.png" width="15px" style="margin-right: 10px;">View Detail</a>
+                        </center>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+    {%endblock%}

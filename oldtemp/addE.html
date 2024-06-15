@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+{% block content %}
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/Cat9199/fadalyoffice/main/images/logo-removebg-preview.png">
+    <style>
+
+        h1 {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 30px;
+            font-weight: bold;
+            color: #333333;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        /* Container Styles */
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            margin-top: 40px;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        /* Form Styles */
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            font-weight: bold;
+            color: #333333;
+            margin-bottom: 10px;
+        }
+        
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 6px;
+            border: 1px solid #ced4da;
+            background-color: #f8f9fa;
+            transition: border-color 0.3s ease-in-out;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 2px 6px rgba(0, 123, 255, 0.4);
+        }
+        /* Button Styles */
+        
+        .btn-group {
+            text-align: center;
+        }
+        
+        .lpm {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 14px 30px;
+            /* Adjusted padding */
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #F9A826;
+            border: none;
+            border-radius: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.4);
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+            white-space: nowrap;
+            /* Added to prevent button text from wrapping */
+        }
+        
+        .lpm:hover {
+            background-color: #F78C00;
+        }
+        
+        .lpm:focus,
+        .lpm.focus {
+            box-shadow: 0 0 0 0.2rem rgba(249, 168, 38, 0.5);
+        }
+        
+        .lpm:disabled,
+        .lpm[disabled] {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .lpm:not(:disabled):not(.disabled):active,
+        .lpm:not(:disabled):not(.disabled).active,
+        .show>.lpm.dropdown-toggle {
+            background-color: #F78C00;
+            border-color: #F57C00;
+            transform: translateY(2px);
+        }
+        /* Additional Styles */
+        
+        .form-control:focus {
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        /* Custom Styles */
+        
+        
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            padding-right: 40px;
+            background: url('https://raw.githubusercontent.com/Cat9199/fadalyoffice/main/images/arrow.png') no-repeat center right;
+            background-size: 24px;
+            color: #333333;
+            font-size: 16px;
+        }
+        
+        .lpm {
+            width: 150px;
+            margin: 0 auto;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.4), 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .lpm:hover {
+            background-color: #F78C00;
+        }
+        
+        .lpm:focus,
+        .lpm.focus {
+            box-shadow: 0 0 0 0.2rem rgba(249, 168, 38, 0.5);
+            transform: translateY(1px);
+        }
+        
+        .lpm:disabled,
+        .lpm:disabled:hover {
+            background-color: #F9A826;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+        
+        @media (max-width: 576px) {
+            .container {
+                padding: 15px;
+            }
+            .lpm {
+                width: 100%;
+            }
+        }
+        
+        .form-btn-group {
+            display: flex;
+            justify-content: center;
+        }
+        
+        .lpm {
+            white-space: nowrap;
+        }
+    </style>
+
+   
+    <h1>Add Employee</h1>
+
+    <div class="container">
+        <form action="/addEmployee" method="POST">
+            <div class="input-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" class="form-control" required>
+            </div>
+
+            <div class="input-group">
+                <label for="position">Workplace:</label>
+                <input type="text" id="position" name="position" class="form-control" required>
+            </div>
+
+            <div class="input-group">
+                <label for="department">Position:</label>
+                <select id="department" name="department" class="form-control" required>
+                    <option value="">Select Position</option>
+                    <option value="surveyor">Surveyor</option>
+                    <option value="assistant-surveyor">Assistant Surveyor</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="employee-id">Employee ID:</label>
+                <input type="number" id="employee-id" name="employee-id" class="form-control" required>
+            </div>
+
+            <div class="form-btn-group">
+                <button type="submit" class="btn btn-warning" style="background-color: #F9A826;">Add Employee</button>
+            </div>
+        </form>
+    </div>
+
+    {% endblock %}
+    

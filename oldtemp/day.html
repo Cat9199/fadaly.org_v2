@@ -1,0 +1,152 @@
+
+{% extends 'base.html' %}
+{% block content %}
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
+
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/Cat9199/fadalyoffice/main/images/logo-removebg-preview.png">
+    <style>
+        /* Add some basic styling to the page */
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        section {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        
+        h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .navbar {
+            background-color: #ffffff;
+            padding: 10px;
+            margin: 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .navbar-logo img {
+            width: 80px;
+        }
+        
+        .navbar-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        .button-link {
+            display: inline-block;
+            width: 80%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: #fff;
+            text-decoration: none;
+            text-align: center;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .button-link:hover {
+            color: #ffffff;
+            text-decoration: none;
+            /* Change the text color on hover */
+        }
+        
+        .ppf {
+            background-color: red;
+            color: white;
+            padding: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 5px;
+        }
+        
+        .ppt {
+            background-color: green;
+            color: white;
+            padding: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 5px;
+        }
+    </style>
+    <section>
+        <h2>Attendance Details</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Workplace</th>
+                    <th>Delete Attendace</th>
+                    <th>view Account</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in e %}
+                <tr>
+                    <td>{{ a.user_id }}</td>
+                    <td>{{ a.name }}</td>
+                    <td>{{ a.Workplace }}</td>
+                    <td>
+                        {% if a.user_id in alist_user_ids %}
+                        <center>
+                            <p class="ppt">Came to work </p>
+                        </center>
+                        {% else %}
+                        <center>
+                            <p class="ppf">Missed work</p>
+                        </center> {% endif %}
+                    </td>
+                    <td>
+                        <center>
+                            <a href="/profile/info/{{ a.id }}" class="button-link"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                              </svg>        view Account</a>
+                        </center>
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </section>
+
+    {% endblock %}

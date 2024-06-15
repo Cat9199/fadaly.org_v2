@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Attendance Saved</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/Cat9199/fadalyoffice/main/images/logo-removebg-preview.png">
+    <!-- Additional styles or scripts if needed -->
+</head>
+
+<body class="bg-gray-900 text-white flex flex-col min-h-screen">
+    <nav class="bg-gray-800 p-4 flex justify-between items-center shadow-md">
+        <a href="#" class="flex items-center">
+            <img src="https://raw.githubusercontent.com/Cat9199/fadalyoffice/main/images/logo-removebg-preview.png" alt="Logo" class="h-10">
+            <span class="ml-3 text-xl font-semibold">Time and Attendance System</span>
+        </a>
+    </nav>
+
+    <main class="flex-grow container mx-auto px-4 py-8">
+        <div class="bg-gray-800 shadow-lg rounded-lg p-8 max-w-2xl mx-auto">
+            <h2 class="text-center text-2xl text-gray-300 mb-4">Attendance Saved</h2>
+            <div class="grid grid-cols-1 gap-4">
+                <div class="text-center dark:text-white">
+                    <img src="data:image/jpeg;base64, {{ image }}" class="rounded-lg shadow-md" alt="Captured Image">
+                </div>
+                <div class="text-center text-xl mt-4">
+                    <table class="mx-auto border-collapse border border-gray-300 dark:border-gray-700 bg-yellow-200 dark:bg-gray-800">
+                        <tr>
+                            <th class="py-2 px-4 border-b bg-yellow-300 dark:bg-gray-700">Name</th>
+                            <td class="py-2 px-4 border-b bg-yellow-100 dark:bg-gray-900">{{ name }}</td>
+                        </tr>
+                        <tr>
+                            <th class="py-2 px-4 border-b bg-yellow-300 dark:bg-gray-700">Attendance</th>
+                            <td class="py-2 px-4 border-b bg-yellow-100 dark:bg-gray-900">{{ attendance }}</td>
+                        </tr>
+                        <tr>
+                            <th class="py-2 px-4 border-b bg-yellow-300 dark:bg-gray-700">Time</th>
+                            <td class="py-2 px-4 border-b bg-yellow-100 dark:bg-gray-900">{{ time }}</td>
+                        </tr>
+                        <tr>
+                            <th class="py-2 px-4 border-b bg-yellow-300 dark:bg-gray-700">Comment</th>
+                            <td class="py-2 px-4 border-b bg-yellow-100 dark:bg-gray-900">
+                                {% if comment %}
+                                    {{ comment }}
+                                {% else %}
+                                    No comment
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="text-center mt-8">
+                    <p class="text-lg text-gray-300">Thank you, {{ name }}, for your attendance!</p>
+                    
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 p-4 text-center text-gray-400">
+        &copy; 2024 Time and Attendance System
+    </footer>
+</body>
+
+</html>

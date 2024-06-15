@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Time and Attendance System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/Cat9199/fadalyoffice/main/images/logo-removebg-preview.png">
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-14460JDDE5"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'G-14460JDDE5');
+    </script>
+    <!-- Hotjar Tracking Code -->
+    <script>
+        (function (h, o, t, j, a, r) {
+            h.hj = h.hj || function () { (h.hj.q = h.hj.q || []).push(arguments) };
+            h._hjSettings = { hjid: 3761013, hjsv: 6 };
+            a = o.getElementsByTagName('head')[0];
+            r = o.createElement('script'); r.async = 1;
+            r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+            a.appendChild(r);
+        })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
+    </script>
+    <style>
+        /* Additional custom styles */
+        .form-control:focus {
+            outline: none;
+            ring: 2;
+            ring-color: orange-500;
+        }
+    </style>
+    <link rel="stylesheet"
+    href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+</head>
+
+<body class="bg-gray-900 text-white flex flex-col min-h-screen">
+    <nav class="bg-gray-800 p-4 flex justify-between items-center shadow-md">
+        <a href="#" class="flex items-center">
+            <img src="https://raw.githubusercontent.com/Cat9199/fadalyoffice/main/images/logo-removebg-preview.png" alt="Logo" class="h-10">
+            <span class="ml-3 text-xl font-semibold">Time and Attendance System</span>
+        </a>
+    </nav>
+
+    <main class="flex-grow container mx-auto px-4 py-8">
+        {% if mes %}
+        <div class="bg-red-600 text-white text-center p-4 mb-6 rounded-lg shadow-md">
+            <p>{{ mes }}</p>
+        </div>
+        {% endif %}
+        <div class="bg-gray-800 shadow-lg rounded-lg p-8 max-w-2xl mx-auto">
+            <div id="formContainer" class="mb-8">
+                <div class="form-group mb-6">
+                    {% if session.name %}
+                    <h3 class="text-center text-2xl text-gray-300 mb-4">Welcome, {{ session.name }}</h3>
+                    {% endif %}
+                    
+                    <label for="user_id" class="block text-gray-300 mb-2">User ID:</label>
+                    {% if not session.user_id %}
+                    <input type="password" class="form-control w-full border border-gray-600 bg-gray-700 rounded-md py-2 px-4" id="user_id" name="user_id" placeholder="Enter your user ID" required>
+                    {% else %}
+                    <input type="password" class="form-control w-10/12 border border-gray-600 bg-gray-700 rounded-md py-2 px-4" id="user_id" name="user_id" value="{{ session.user_id }}" readonly>
+                    <a href="/delete-session" class="bg-red-500 text-white px-2 py-2 rounded-md shadow-md hover:bg-red-600 transition duration-200"><i class='bx bxs-edit-alt bx-flashing ' style="font-size:24px" ></i></a>
+                    {%endif%}
+                </div>
+                </div>
+
+                <div class="form-group mb-6">
+                    <label for="attendance" class="block text-gray-300 mb-2">Attendance:</label>
+                    <select id="attendance" name="attendance" class="form-control w-full border border-gray-600 bg-gray-700 rounded-md py-2 px-4">
+                        <option value="Entrance">Entrance</option>
+                        <option value="Exit">Exit</option>
+                    </select>
+                </div>
+
+                <div class="form-group mb-6" id="commentGroup">
+                    <label for="comment" class="block text-gray-300 mb-2">Comment:</label>
+                    <input type="text" class="form-control w-full border border-gray-600 bg-gray-700 rounded-md py-2 px-4" id="comment1" name="comment1" maxlength="1000" placeholder="Enter your comment here...">
+                </div>
+                
+                <br>
+                <div class="video-container flex justify-center items-center bg-gray-700 rounded-lg p-4 mb-8 shadow-md" id="videoContainer">
+                    <video id="video" autoplay class="w-full max-w-lg rounded-lg"></video>
+                    <!-- comment section -->
+                </div>
+                <div class="text-center">
+                    <button id="captureButton" onclick="capturePhoto()" class="bg-orange-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-orange-600 transition duration-200 w-full" style="display: none;" disabled>Capture Photo</button>
+                </div>
+                <div class="text-center mt-8">
+                    <button onclick="enableCamera()" id="enableCameraBtn" class="bg-orange-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-orange-600 transition duration-200 w-full">Enable Camera</button>
+                </div>
+            </div>
+            
+            
+        </div>
+
+        <form id="uploadForm" action="/capture" method="POST" enctype="multipart/form-data" class="hidden">
+            <input type="hidden" id="idInput" name="id">
+            <input type="hidden" id="attendanceInput" name="attendance">
+            <input type="hidden" id="latitudeInput" name="latitude">
+            <input type="hidden" id="longitudeInput" name="longitude">
+            <input type="hidden" id="comment" name="comment" maxlength="1000">
+            <input type="file" id="photoDataInput" name="photoData" class="hidden">
+        </form>
+
+    </main>
+
+    <footer class="bg-gray-800 p-4 text-center text-gray-400">
+        &copy; 2024 Time and Attendance System
+    </footer>
+
+    <script>
+        let capturedLocations = [];
+
+        function handleInput(event, direction) {
+            const input = event.target;
+            if (direction === 'next' && input.value.length >= input.maxLength) {
+                const nextInput = input.nextElementSibling;
+                if (nextInput) nextInput.focus();
+            } else if (direction === 'prev' && event.key === 'Backspace' && input.value === '') {
+                const prevInput = input.previousElementSibling;
+                if (prevInput) prevInput.focus();
+            }
+        }
+
+        function enableCamera() {
+            const constraints = { video: true };
+            navigator.mediaDevices.getUserMedia(constraints)
+                .then(stream => {
+                    const videoElement = document.getElementById('video');
+                    videoElement.srcObject = stream;
+                    videoElement.play();
+
+                    document.getElementById('videoContainer').style.display = 'flex';
+                    document.getElementById('captureButton').style.display = 'block';
+                    document.getElementById('enableCameraBtn').style.display = 'none';
+                    document.getElementById('captureButton').disabled = false;
+
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(position => {
+                            capturedLocations.push({
+                                latitude: position.coords.latitude,
+                                longitude: position.coords.longitude
+                            });
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error accessing the camera:', error);
+                    document.getElementById('enableCameraBtn').disabled = true;
+                    document.getElementById('enableCameraBtn').textContent = 'Camera Not Available';
+                });
+        }
+
+        function capturePhoto() {
+            const canvasElement = document.createElement('canvas');
+            const context = canvasElement.getContext('2d');
+            const videoElement = document.getElementById('video');
+            const user_id = document.getElementById('user_id').value.trim();
+            const attendance = document.getElementById('attendance').value;
+            const comment = document.getElementById('comment1').value.trim();
+            const location = capturedLocations[capturedLocations.length - 1] || {};
+
+            if (user_id === '') {
+                alert('Please enter your user ID.');
+                return;
+            }
+
+            document.getElementById('idInput').value = user_id;
+            document.getElementById('attendanceInput').value = attendance;
+            document.getElementById('latitudeInput').value = location.latitude || '';
+            document.getElementById('longitudeInput').value = location.longitude || '';
+            document.getElementById('comment').value = comment;
+
+            canvasElement.width = videoElement.videoWidth;
+            canvasElement.height = videoElement.videoHeight;
+            context.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+
+            canvasElement.toBlob(blob => {
+                const photoFile = new File([blob], 'photo.jpg', { type: 'image/jpeg' });
+                const fileList = new DataTransfer();
+                fileList.items.add(photoFile);
+                const photoDataInput = document.getElementById('photoDataInput');
+                photoDataInput.files = fileList.files;
+                const uploadForm = document.getElementById('uploadForm');
+                uploadForm.submit();
+            }, 'image/jpeg');
+        }
+    </script>
+</body>
+
+</html>

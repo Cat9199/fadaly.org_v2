@@ -1,0 +1,73 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-6">
+        <div class="box">
+            <div class="box-header">
+                <h4 class="box-title mb-22">Employee Details</h4>
+            </div>
+            <div class="box-body">
+                <p><strong>Name:</strong> {{ employee.name }}</p>
+                <p><strong>Position:</strong> {{ employee.position }}</p>
+                <p><strong>Workplace:</strong> {{ employee.workplace }}</p>
+                <p><strong>Email:</strong> {{ employee.email }}</p>
+                <p><strong>Phone:</strong> {{ employee.mobile_phone }}</p>
+                <!-- Add other details as needed -->
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6">
+        <div class="box">
+            <div class="box-header">
+                <h4 class="box-title mb-22">Attendance Records</h4>
+            </div>
+            <div class="box-body">
+                <div id="map" style="height: 400px; border: 1px solid #ccc; border-radius: 5px;"></div>
+                <ul class="list-group mt-3">
+            
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-6">
+                                    <strong>Date:</strong> {{ record.date }}<br>
+                                    <strong>Time In:</strong> {{ record.time_in or 'Not recorded' }}<br>
+                                    <strong>Location In:</strong> {{ record.latitude_in }}, {{ record.longitude_in }}<br>
+                                </div>
+                                <div class="col-6">
+                                    <strong>Time Out:</strong> {{ record.time_out or 'Not recorded' }}<br>
+                                    <strong>Location Out:</strong> {{ record.latitude_out }}, {{ record.longitude_out }}<br>
+                                </div>
+                            </div>
+                        </li>
+             
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- LeafletJS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+    var map = L.map('map').setView([{{ record.latitude_in }}, {{ record.longitude_in }}], 13);
+
+    // Add markers and popups for each record
+ 
+        {% if record.latitude_in and record.longitude_in %}
+            L.marker([{{ record.latitude_in }}, {{ record.longitude_in }}]).addTo(map)
+                .bindPopup('<b>Time In:</b> {{ record.time_in or 'Not recorded' }}')
+                .openPopup();
+            {% endif %}
+        
+        {% if record.latitude_out and record.longitude_out %}
+            L.marker([{{ record.latitude_out }}, {{ record.longitude_out }}]).addTo(map)
+                .bindPopup('<b>Time Out:</b> {{ record.time_out or 'Not recorded' }}')
+                .openPopup();
+        {% endif %}
+
+</script>
+
+{% endblock %}

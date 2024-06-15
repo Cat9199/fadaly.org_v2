@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Time and Attendance System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/Cat9199/fadalyoffice/main/images/logo-removebg-preview.png">
+    <style>
+        /* General Styles */
+        
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f7f7f7;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        
+        h1 {
+            margin: 20px 0;
+            font-size: 32px;
+            font-weight: bold;
+            color: #000000;
+        }
+        /* Navbar Styles */
+        
+        .navbar {
+            padding: 10px;
+            background-color: #fff;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-brand img {
+            max-height: 40px;
+        }
+        /* Container Styles */
+        
+        .container {
+            margin: 30px auto;
+            max-width: 400px;
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .capture-button {
+            padding: 12px 24px;
+            font-size: 18px;
+            font-weight: 500;
+            border-radius: 8px;
+            background-color: #ff9900;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+        }
+    </style>
+
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">
+                <img src="https://raw.githubusercontent.com/Cat9199/fadalyoffice/main/images/logo-removebg-preview.png" alt="Logo">
+            </a>
+        </nav>
+        <br><br><br>
+        <center>
+            <h1 class="title">Add A comment</h1>
+        </center>
+
+        <div class="container">
+            <div id="formContainer">
+                {% if ftype == "e1" %}
+                <form action="/Comment/{{ id }}/e1" method="POST">
+                    <div class="form-group comment-group">
+                        <label for="comment">Comment:</label>
+                        <input type="text" class="form-control" id="coment" name="coment" maxlength="1000" placeholder="Enter your comment here...">
+                    </div>
+                    <br>
+                    <center>
+                        <button type="submit" class="capture-button "><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send-fill" viewBox="0 0 16 16">
+                        <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z"/>
+                      </svg>Send Comment</button></center>
+                </form>
+                {% elif ftype == "e2" %}
+                <form action="/Comment/{{ id }}/e2" method="POST">
+                    <div class="form-group comment-group">
+                        <label for="comment">Comment:</label>
+                        <input type="text" class="form-control" id="coment" name="coment" maxlength="1000" placeholder="Enter your comment here...">
+                    </div>
+                    <br>
+                    <center>
+                        <button type="submit" class="capture-button "><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send-fill" viewBox="0 0 16 16">
+                        <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083l6-15Zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471-.47 1.178Z"/>
+                      </svg>Send Comment</button></center>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </body>
