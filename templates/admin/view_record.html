@@ -1,8 +1,10 @@
 {% extends 'admin/base.html' %}
 
 {% block content %}
+<center><h2>This is {{employee.name}} Attendance in {{record.date}}</h2></center>
+<br>
 <div class="row">
-    <div class="col-6">
+    <div class="col-lg-6">
         <div class="box">
             <div class="box-header">
                 <h4 class="box-title mb-22">Employee Details</h4>
@@ -13,61 +15,123 @@
                 <p><strong>Workplace:</strong> {{ employee.workplace }}</p>
                 <p><strong>Email:</strong> {{ employee.email }}</p>
                 <p><strong>Phone:</strong> {{ employee.mobile_phone }}</p>
-                <!-- Add other details as needed -->
+                <p><strong>Address:</strong> {{ employee.address }}</p>
+            </div>
+
+        </div>
+        <div class="box">
+            <!-- tabel -->
+            <div class="box-header">
+            <h4 class="box-title mb-22">
+                <center>
+                Last Attendance
+                </center>
+            </h4>
+            </div>
+            <div class="table-responsive">
+            <div id="task-profile_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
+                <div class="row">
+                <div class="col-sm-12">
+                    <table class="table table-vcenter text-nowrap table-bordered dataTable no-footer" id="task-profile" role="grid">
+                    <thead>
+                        <tr class="top">
+                        <th class="border-bottom-0 text-center sorting fs-14 font-w500" tabindex="0" aria-controls="task-profile" rowspan="1" colspan="1">No</th>
+                        <th class="border-bottom-0 sorting fs-14 font-w500" tabindex="0" aria-controls="task-profile" rowspan="1" colspan="1">Employee Name</th>
+                        <th class="border-bottom-0 sorting fs-14 font-w500" tabindex="0" aria-controls="task-profile" rowspan="1" colspan="1">Time In</th>
+                        <th class="border-bottom-0 sorting fs-14 font-w500" tabindex="0" aria-controls="task-profile" rowspan="1" colspan="1">Time Out</th>
+                        <th class="border-bottom-0 sorting fs-14 font-w500" tabindex="0" aria-controls="task-profile" rowspan="1" colspan="1">Status</th>
+                        <th class="border-bottom-0 sorting_disabled fs-14 font-w500" rowspan="1" colspan="1">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in records %}
+                        <tr class="{{ loop.cycle('odd', 'even') }}">
+                        <td class="text-center">{{ loop.index }}</td>
+                        <td>{{ record.name }}</td>
+                        <td>{{ record.time_in }}</td>
+                        <td>{{ record.time_out }}</td>
+                        <td>
+                            <span class="badge badge-success">Present</span>
+                        </td>
+                        <td>
+                            <div class="dropdown">
+                            <a href="javascript:void(0);" class="btn-link" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bx bx-dots-horizontal-rounded"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" href="/admin/view_record/{{record.id}}"><i class="bx bx-show mr-5"></i> View</a>
+                                <a class="dropdown-item" href="/admin/delete_record/{{record.id}}"><i class="bx bx-trash mr-5"></i> Delete</a>
+                            </div>
+                            </div>
+                        </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
             </div>
         </div>
     </div>
 
-    <div class="col-6">
+    <div class="col-lg-6">
         <div class="box">
             <div class="box-header">
                 <h4 class="box-title mb-22">Attendance Records</h4>
             </div>
             <div class="box-body">
-                <div id="map" style="height: 400px; border: 1px solid #ccc; border-radius: 5px;"></div>
-                <ul class="list-group mt-3">
-            
-                        <li class="list-group-item">
-                            <div class="row">
-                                <div class="col-6">
-                                    <strong>Date:</strong> {{ record.date }}<br>
-                                    <strong>Time In:</strong> {{ record.time_in or 'Not recorded' }}<br>
-                                    <strong>Location In:</strong> {{ record.latitude_in }}, {{ record.longitude_in }}<br>
-                                </div>
-                                <div class="col-6">
-                                    <strong>Time Out:</strong> {{ record.time_out or 'Not recorded' }}<br>
-                                    <strong>Location Out:</strong> {{ record.latitude_out }}, {{ record.longitude_out }}<br>
-                                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="mapouter">
+                            <div class="gmap_canvas">
+                                <iframe width="100%" height="300"
+                                    src="https://maps.google.com/maps?q={{record.latitude_in}},{{record.longitude_in}}&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                                    frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
                             </div>
-                        </li>
-             
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mapouter">
+                            <div class="gmap_canvas">
+                                <iframe width="100%" height="300"
+                                    src="https://maps.google.com/maps?q={{record.latitude_out}},{{record.longitude_out}}&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                                    frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <ul class="list-group mt-3">
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-6">
+                                <strong>Date:</strong> {{ record.date }}<br>
+                                <strong>Time In:</strong> {{ record.time_in or 'Not recorded' }}<br>
+                                <strong>Location In:</strong> {{ record.latitude_in }}, {{ record.longitude_in }}<br>
+                                {% if record.image_in %}
+                                <img src="{{ url_for('admin.displayrecordimg', id=record.id, type='in') }}"
+                                    alt="Time In Image" class="img-fluid mt-2">
+                                {% else %}
+                                <p>No Time In Image</p>
+                                {% endif %}
+                            </div>
+                            <div class="col-6">
+                                <!-- date -->
+                                <strong>Date:</strong> {{ record.date }}<br>
+                                <strong>Time Out:</strong> {{ record.time_out or 'Not recorded' }}<br>
+                                <strong>Location Out:</strong> {{ record.latitude_out }}, {{ record.longitude_out }}<br>
+                                {% if record.image_out %}
+                                <img src="{{ url_for('admin.displayrecordimg', id=record.id, type='out') }}"
+                                    alt="Time Out Image" class="img-fluid mt-2">
+                                {% else %}
+                                <p>No Time Out Image</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>
     </div>
 </div>
-
-<!-- LeafletJS -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-<script>
-    var map = L.map('map').setView([{{ record.latitude_in }}, {{ record.longitude_in }}], 13);
-
-    // Add markers and popups for each record
- 
-        {% if record.latitude_in and record.longitude_in %}
-            L.marker([{{ record.latitude_in }}, {{ record.longitude_in }}]).addTo(map)
-                .bindPopup('<b>Time In:</b> {{ record.time_in or 'Not recorded' }}')
-                .openPopup();
-            {% endif %}
-        
-        {% if record.latitude_out and record.longitude_out %}
-            L.marker([{{ record.latitude_out }}, {{ record.longitude_out }}]).addTo(map)
-                .bindPopup('<b>Time Out:</b> {{ record.time_out or 'Not recorded' }}')
-                .openPopup();
-        {% endif %}
-
-</script>
-
 {% endblock %}

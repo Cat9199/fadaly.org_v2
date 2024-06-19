@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, session, redirect ,Blueprint
+from flask import Flask, render_template, request, jsonify, session, redirect ,Blueprint , Response
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 import base64
@@ -349,24 +349,29 @@ def add_employees():
 def view_record(id):
     time_records = TimeRecord.query.filter_by(id=id).first()
     employee = Employees.query.filter_by(user_id=time_records.user_id).first()
-
+    # last 10 records
+    records = TimeRecord.query.filter_by(user_id=time_records.user_id).order_by(TimeRecord.id.desc()).limit(5).all()
     context = {
         'employee': employee,
         'record': time_records,
+        'records': records,
     }
     return render_template('admin/view_record.html', **context)
+
 # /admin/displayrecordimg/<int:id>/<type> route
 @admin.route('/displayrecordimg/<int:id>/<type>')
 def displayrecordimg(id, type):
-    location = TimeRecord.query.filter_by(id=id).first()
+    # Retrieve the record by ID
+    record = TimeRecord.query.filter_by(id=id).first()
+    # Determine which image attribute to use based on the type parameter
     if type == 'in':
-        image = location.image_in
+        image_data = record.image_in
     elif type == 'out':
-        image = location.image_out
+        image_data = record.image_out
     else:
-        return render_template('admin/displayrecordimg.html', mes='Invalid type parameter!')
-
-    return render_template('admin/displayrecordimg.html', image=base64.b64encode(image).decode('utf-8'))
+        return "Invalid image type"
+    # Return the image as a response
+    return Response(image_data, mimetype='image/jpeg')
 # export the blueprint
 app.register_blueprint(employees, url_prefix='/')
 app.register_blueprint(admin, url_prefix='/admin')
