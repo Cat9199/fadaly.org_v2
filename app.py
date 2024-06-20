@@ -244,6 +244,8 @@ def login():
         password = request.form.get('password')
         if username == 'admin' and password == 'Fadaly@2050':
             session['admin'] = True
+            session.permanent = True
+            app.permanent_session_lifetime = timedelta(days=90)
             return redirect('/admin/dashboard')
         else:
             return render_template('admin/login.html', mes='Invalid username or password')
