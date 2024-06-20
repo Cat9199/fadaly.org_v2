@@ -371,7 +371,7 @@ def add_employees():
             db.session.add(employee)
             db.session.commit()
 
-            return redirect('/')
+            return redirect('/admin/employees')
 
     return render_template('admin/add_employees.html')
 # /admin/view_record/<int:id> route
