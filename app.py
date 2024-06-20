@@ -285,7 +285,7 @@ def admin_employees():
 def add_employees():
     if not session.get('admin'):
         return redirect('/admin/login')
-        if request.method == 'POST':
+    if request.method == 'POST':
             name = request.form.get('name')
             workplace = request.form.get('workplace')
             position = request.form.get('position')
@@ -373,7 +373,7 @@ def add_employees():
 
             return redirect('/')
 
-        return render_template('admin/add_employees.html')
+    return render_template('admin/add_employees.html')
 # /admin/view_record/<int:id> route
 @admin.route('/view_record/<int:id>')
 def view_record(id):
