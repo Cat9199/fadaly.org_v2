@@ -72,8 +72,8 @@
                                         <tr class="{{ loop.cycle('odd', 'even') }}">
                                             <td class="text-center">{{ loop.index }}</td>
                                             <td>{{ record.name }}</td>
-                                            <td>{{ record.time_in }}</td>
-                                            <td>{{ record.time_out }}</td>
+                                            <td>{{ record.time_in.strftime('%H:%M:%S') }}</td>
+                                            <td>{{ record.time_out.strftime('%H:%M:%S') }}</td>
                                             <td>
                                      
                                                     <span class="badge badge-success">Present</span>

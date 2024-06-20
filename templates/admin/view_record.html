@@ -48,8 +48,8 @@
                         <tr class="{{ loop.cycle('odd', 'even') }}">
                         <td class="text-center">{{ loop.index }}</td>
                         <td>{{ record.name }}</td>
-                        <td>{{ record.time_in }}</td>
-                        <td>{{ record.time_out }}</td>
+                        <td>{{ record.time_in.strftime('%H:%M:%S') }}</td>
+                        <td>{{ record.time_out.strftime('%H:%M:%S') }}</td>
                         <td>
                             <span class="badge badge-success">Present</span>
                         </td>
@@ -106,7 +106,7 @@
                         <div class="row">
                             <div class="col-6">
                                 <strong>Date:</strong> {{ record.date }}<br>
-                                <strong>Time In:</strong> {{ record.time_in or 'Not recorded' }}<br>
+                                <strong>Time In:</strong> {{ record.time_in.strftime('%H:%M:%S') or 'Not recorded' }}<br>
                                 <strong>Location In:</strong> {{ record.latitude_in }}, {{ record.longitude_in }}<br>
                                 {% if record.image_in %}
                                 <img src="{{ url_for('admin.displayrecordimg', id=record.id, type='in') }}"
@@ -118,7 +118,7 @@
                             <div class="col-6">
                                 <!-- date -->
                                 <strong>Date:</strong> {{ record.date }}<br>
-                                <strong>Time Out:</strong> {{ record.time_out or 'Not recorded' }}<br>
+                                <strong>Time Out:</strong> {{ record.time_out.strftime('%H:%M:%S') or 'Not recorded' }}<br>
                                 <strong>Location Out:</strong> {{ record.latitude_out }}, {{ record.longitude_out }}<br>
                                 {% if record.image_out %}
                                 <img src="{{ url_for('admin.displayrecordimg', id=record.id, type='out') }}"

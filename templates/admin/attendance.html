@@ -1,0 +1,117 @@
+<!-- attendance.html Page -->
+
+{% extends 'admin/base.html' %} {% block content %}
+<!-- Today Attendance Section  -->
+<div class="row">
+      <!-- Today Attendance -->
+      <div class="col-6">
+            <div class="box">
+                  <center>
+                        <h3>Today Attendance</h3>
+                  </center>
+                  <br>
+                  <div class="box-body">
+                        <div class="table-responsive">
+                              <div id="task-profile_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
+                                    <div class="row">
+                                          <div class="col-sm-12">
+                                                <table class="table table-vcenter text-nowrap table-bordered dataTable no-footer"
+                                                      id="task-profile" role="grid">
+                                                      <thead>
+                                                            <tr role="row"></tr>
+                                                            <th class="sorting_asc" tabindex="0"
+                                                                  aria-controls="task-profile" rowspan="1" colspan="1"
+                                                                  aria-sort="ascending"
+                                                                  aria-label="Name: activate to sort column descending"
+                                                                  style="width: 100px;">Name</th>
+                                                            <th class="sorting" tabindex="0"
+                                                                  aria-controls="task-profile" rowspan="1" colspan="1"
+                                                                  aria-label="Time In: activate to sort column ascending"
+                                                                  style="width: 100px;">Time In</th>
+                                                            <th class="sorting" tabindex="0"
+                                                                  aria-controls="task-profile" rowspan="1" colspan="1"
+                                                                  aria-label="Time Out: activate to sort column ascending"
+                                                                  style="width: 100px;">Time Out</th>
+                                                            <th class="sorting" tabindex="0"
+                                                                  aria-controls="task-profile" rowspan="1" colspan="1"
+                                                                  aria-label="Status: activate to sort column ascending"
+                                                                  style="width: 100px;">date</th>
+                                                            </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                            {% for record in records %}
+                                                            <tr role="row" class="odd">
+                                                                  <td>{{record.name}}</td>
+                                                                  <td>{{ record.time_in.strftime('%H:%M:%S') }}</td>
+                                                                  <td>{{ record.time_out.strftime('%H:%M:%S') }}</td>
+                                                                  <td>{{record.date}}</td>
+                                                            </tr>
+                                                            {% endfor %}
+                                                      </tbody>
+                                                </table>
+                                          </div>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+            </div>
+      </div>
+      <!-- Emploewer States if he com to work or not  -->
+      <div class="col-6">
+            <div class="box">
+                  <center>
+                        <h3>Employer States</h3>
+                  </center>
+                  <br>
+                  <div class="box-body">
+                        <div class="table-responsive">
+                              <div id="task-profile_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
+                                    <div class="row">
+                                          <div class="col-sm-12">
+                                                <table class="table table-vcenter text-nowrap table-bordered dataTable no-footer"
+                                                      id="task-profile" role="grid">
+                                                      <thead>
+                                                            <tr role="row"></tr>
+                                                            <th class="sorting_asc" tabindex="0"
+                                                                  aria-controls="task-profile" rowspan="1" colspan="1"
+                                                                  aria-sort="ascending"
+                                                                  aria-label="Name: activate to sort column descending"
+                                                                  style="width: 100px;">Name</th>
+                                                            <!-- user _id  -->
+
+                                                            <th class="sorting" tabindex="0"
+                                                                  aria-controls="task-profile" rowspan="1" colspan="1"
+                                                                  aria-label="Status: activate to sort column ascending"
+                                                                  style="width: 100px;">Status</th>
+                                                            </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                            {% for emp in employees %}
+                                                            <tr role="row" class="odd">
+                                                                  <td>{{emp.name}}</td>
+
+                                                                  <td>
+
+                                                                        {% if emp.user_id in EmployeesAttendTodayUserId
+                                                                        %}
+                                                                        <span class="badge badge-success"> Attend
+                                                                        </span>
+                                                                        {% else %}
+                                                                        <span class="badge badge-danger"> Absent </span>
+                                                                        {% endif %}
+
+                                                                  </td>
+                                                            </tr>
+                                                            {% endfor %}
+                                                      </tbody>
+                                                </table>
+                                          </div>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+            </div>
+      </div>
+</div>
+<!-- Today Attendance Section End -->
+{% endblock %}

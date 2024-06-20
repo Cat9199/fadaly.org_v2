@@ -16,8 +16,6 @@ app.config["SESSION_TYPE"] = "filesystem"
 app.secret_key = 'your_secret_key_here'
 db = SQLAlchemy(app)
 CORS(app, resources={r"/*": {"origins": "*"}})
-
-
 class Employees(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
@@ -357,7 +355,37 @@ def view_record(id):
         'records': records,
     }
     return render_template('admin/view_record.html', **context)
+# /admin/employee/<int:id> route
+@admin.route('/employee/<int:id>')
+def employee(id):
+    employee = Employees.query.filter_by(id=id).first()
+    thisMonthRecords = TimeRecord.query.filter_by(user_id=employee.user_id, month=date.today().month).all()
+    workingHours = 0
+    totalAttendance = TimeRecord.query.filter_by(user_id=employee.user_id).count()
+    for record in thisMonthRecords:
+        if record.time_out and record.time_in:
+            workingHours += (record.time_out.hour - record.time_in.hour) + (record.time_out.minute - record.time_in.minute) / 60
+    context = {
+        'employee': employee,
+        'workingHours': workingHours,
+        'totalAttendance': totalAttendance,
+        'thisMonthRecords': thisMonthRecords
+    }
+    return render_template('admin/employee.html', employee=employee)
 
+@admin.route('/attendance')
+# it will display all the today's attendance and the states for every employee if he attend today or not
+def attendance():
+    today = date.today()
+    employees = Employees.query.all()
+    records = TimeRecord.query.filter_by(date=today).all()
+    EmployeesAttendTodayUserId = [record.user_id for record in records]
+    context = {
+        'employees': employees,
+        'records': records,
+        'EmployeesAttendTodayUserId': EmployeesAttendTodayUserId
+    }
+    return render_template('admin/attendance.html', **context)
 # /admin/displayrecordimg/<int:id>/<type> route
 @admin.route('/displayrecordimg/<int:id>/<type>')
 def displayrecordimg(id, type):
