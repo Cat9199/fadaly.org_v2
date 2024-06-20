@@ -229,8 +229,34 @@ def delete_session():
     session.pop('user_id', None)
     return redirect('/')
 # ----------------- admin -----------------
+@admin.route('/')
+def admin_home1():
+    if session.get('admin'):
+        return redirect('/admin/dashboard')
+    else:
+        return redirect('/admin/login')
+# admin auth 
+@admin.route('/login', methods=['GET', 'POST'])
+def login():
+    # admin username and password is admin and Fadaly@2050
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        if username == 'admin' and password == 'Fadaly@2050':
+            session['admin'] = True
+            return redirect('/admin/dashboard')
+        else:
+            return render_template('admin/login.html', mes='Invalid username or password')
+    return render_template('admin/login.html')
+@admin.route('/logout')
+def logout():
+    session.pop('admin', None)
+    return redirect('/admin/login')
+
 @admin.route('/dashboard')
 def admin_home():
+    if not session.get('admin'):
+        return redirect('/admin/login')
     emplowersCount = Employees.query.count()
     timeRecordsCount = TimeRecord.query.count()
     notificationsCount = Notification.query.count()
@@ -249,10 +275,14 @@ def admin_home():
 # /admin/employees route
 @admin.route('/employees')
 def admin_employees():
+    if not session.get('admin'):
+        return redirect('/admin/login')
     employees = Employees.query.all()
     return render_template('admin/employees.html', employees=employees)
 @admin.route('/add_employees', methods=['GET', 'POST'])
 def add_employees():
+    if not session.get('admin'):
+        return redirect('/admin/login')
         if request.method == 'POST':
             name = request.form.get('name')
             workplace = request.form.get('workplace')
@@ -345,6 +375,8 @@ def add_employees():
 # /admin/view_record/<int:id> route
 @admin.route('/view_record/<int:id>')
 def view_record(id):
+    if not session.get('admin'):
+        return redirect('/admin/login')
     time_records = TimeRecord.query.filter_by(id=id).first()
     employee = Employees.query.filter_by(user_id=time_records.user_id).first()
     # last 10 records
@@ -358,6 +390,8 @@ def view_record(id):
 # /admin/employee/<int:id> route
 @admin.route('/employee/<int:id>')
 def employee(id):
+    if not session.get('admin'):
+        return redirect('/admin/login')
     employee = Employees.query.filter_by(id=id).first()
     thisMonthRecords = TimeRecord.query.filter_by(user_id=employee.user_id, month=date.today().month).all()
     workingHours = 0
@@ -376,6 +410,8 @@ def employee(id):
 @admin.route('/attendance')
 # it will display all the today's attendance and the states for every employee if he attend today or not
 def attendance():
+    if not session.get('admin'):
+        return redirect('/admin/login')
     today = date.today()
     employees = Employees.query.all()
     records = TimeRecord.query.filter_by(date=today).all()
@@ -389,6 +425,8 @@ def attendance():
 # /admin/displayrecordimg/<int:id>/<type> route
 @admin.route('/displayrecordimg/<int:id>/<type>')
 def displayrecordimg(id, type):
+    if not session.get('admin'):
+        return redirect('/admin/login')
     # Retrieve the record by ID
     record = TimeRecord.query.filter_by(id=id).first()
     # Determine which image attribute to use based on the type parameter
@@ -400,6 +438,21 @@ def displayrecordimg(id, type):
         return "Invalid image type"
     # Return the image as a response
     return Response(image_data, mimetype='image/jpeg')
+# 404 page and error handler
+
+@app.errorhandler(404)
+def page_not_found(e):
+    if session.get('admin'):
+        return render_template('admin/404.html'), 404
+    else:
+        return "404", 404
+# 500 page and error handler
+@app.errorhandler(500)
+def internal_server_error(e):
+    if session.get('admin'):
+        return render_template('admin/500.html'), 500
+    else:
+        return "500", 500        
 # export the blueprint
 app.register_blueprint(employees, url_prefix='/')
 app.register_blueprint(admin, url_prefix='/admin')
