@@ -31,14 +31,28 @@
             </div>
             <div class="icon-box bg-color-1">
                 <div class="icon bg-icon-1">
-                    <i class='bx bx-comment' style="font-size: 24px;"></i>
+                    <i class='bx bx-time' style="font-size: 24px;"></i>
                 </div>
                 <div class="content">
-                    <h5 class="title-box">Admin Comments</h5>
-                    <p class="color-1 mb-0 pt-4">{{adminCommentsCount}} Admin Comments</p>
+                    <h5 class="title-box">Time</h5>
+                    <p class="color-1 mb-0 pt-4" id="time"></p>
                 </div>
+
+                <script>
+                    function updateTime() {
+                        var now = new Date();
+                        var hours = now.getHours();
+                        var minutes = now.getMinutes();
+                        var seconds = now.getSeconds();
+                        var timeString = hours > 12 ? (hours - 12) : hours;
+                        timeString += ":" + (minutes < 10 ? "0" + minutes : minutes);
+                        timeString += ":" + (seconds < 10 ? "0" + seconds : seconds);
+                        timeString += hours >= 12 ? " PM" : " AM";
+                        document.getElementById("time").innerHTML = timeString;
+                    }
+                    setInterval(updateTime, 1000); // Update time every second
+                </script>
             </div>
-             
         </div>
     </div>
 </div>

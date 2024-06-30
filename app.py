@@ -15,7 +15,9 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 app.secret_key = 'your_secret_key_here'
 db = SQLAlchemy(app)
+
 CORS(app, resources={r"/*": {"origins": "*"}})
+
 class Employees(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
@@ -23,47 +25,47 @@ class Employees(db.Model):
     position = db.Column(db.String(100))
     user_id = db.Column(db.Integer)
     # Personal Information
-    date_of_birth = db.Column(db.Date)
-    gender = db.Column(db.String(20))
-    marital_status = db.Column(db.String(50))
-    nationality = db.Column(db.String(100))
+    date_of_birth = db.Column(db.String(50), default="notset")
+    gender = db.Column(db.String(20), default="notset")
+    marital_status = db.Column(db.String(50), default="notset")
+    nationality = db.Column(db.String(100), default="notset")
     # Contact Information
-    address = db.Column(db.String(255))
-    mobile_phone = db.Column(db.String(20))
-    home_phone = db.Column(db.String(20))
-    email = db.Column(db.String(120))
+    address = db.Column(db.String(255), default="notset")
+    mobile_phone = db.Column(db.String(20), default="notset")
+    home_phone = db.Column(db.String(20), default="notset")
+    email = db.Column(db.String(120), default="notset")
     # Work Experience
-    current_job_title = db.Column(db.String(100))
-    start_date_current_job = db.Column(db.Date)
-    duration_current_job = db.Column(db.String(50))
-    previous_job_titles = db.Column(db.String(255))
-    previous_companies = db.Column(db.String(255))
-    duration_previous_job = db.Column(db.String(255))
+    current_job_title = db.Column(db.String(100), default="notset")
+    start_date_current_job = db.Column(db.String(50), default="notset")
+    duration_current_job = db.Column(db.String(50), default="notset")
+    previous_job_titles = db.Column(db.String(255), default="notset")
+    previous_companies = db.Column(db.String(255), default="notset")
+    duration_previous_job = db.Column(db.String(255), default="notset")
     # Skills and Languages
-    autocad_proficiency = db.Column(db.String(5))
-    civil_3d_proficiency = db.Column(db.String(5))
-    total_station_proficiency = db.Column(db.String(5))
-    gps_proficiency = db.Column(db.String(5))
-    _3d_scanner_proficiency = db.Column(db.String(5))
-    data_transfer_software_proficiency = db.Column(db.String(5))
-    languages = db.Column(db.String(255))
-    technical_skills = db.Column(db.String(255))
-    personal_skills = db.Column(db.String(255))
+    autocad_proficiency = db.Column(db.String(5), default="notset")
+    civil_3d_proficiency = db.Column(db.String(5), default="notset")
+    total_station_proficiency = db.Column(db.String(5), default="notset")
+    gps_proficiency = db.Column(db.String(5), default="notset")
+    _3d_scanner_proficiency = db.Column(db.String(5), default="notset")
+    data_transfer_software_proficiency = db.Column(db.String(5), default="notset")
+    languages = db.Column(db.String(255), default="notset")
+    technical_skills = db.Column(db.String(255), default="notset")
+    personal_skills = db.Column(db.String(255), default="notset")
     # Additional Information
-    highest_education_degree = db.Column(db.String(100))
-    field_of_study = db.Column(db.String(100))
-    educational_institution = db.Column(db.String(255))
-    graduation_year = db.Column(db.Integer)
-    additional_info = db.Column(db.Text)
+    highest_education_degree = db.Column(db.String(100), default="notset")
+    field_of_study = db.Column(db.String(100), default="notset")
+    educational_institution = db.Column(db.String(255), default="notset")
+    graduation_year = db.Column(db.Integer, default="notset")
+    additional_info = db.Column(db.Text, default="notset")
     # Financial Information
-    personal_bank_account_number = db.Column(db.String(50))
-    bank_name = db.Column(db.String(100))
-    personal_wallet_number = db.Column(db.String(50))
-    tax_number = db.Column(db.String(50))
-    social_security_number = db.Column(db.String(50))
+    personal_bank_account_number = db.Column(db.String(50), default="notset")
+    bank_name = db.Column(db.String(100), default="notset")
+    personal_wallet_number = db.Column(db.String(50), default="notset")
+    tax_number = db.Column(db.String(50), default="notset")
+    social_security_number = db.Column(db.String(50), default="notset")
     # Emergency Contact
-    emergency_contact_name = db.Column(db.String(100))
-    emergency_contact_phone = db.Column(db.String(20))
+    emergency_contact_name = db.Column(db.String(100), default="notset")
+    emergency_contact_phone = db.Column(db.String(20), default="notset")
 
 
 
@@ -103,7 +105,17 @@ class TimeRecord(db.Model):
     Tlocation_out = db.Column(db.String(1000))
     attendance_in = db.Column(db.String(10))
     attendance_out = db.Column(db.String(10))
+MODEL_MAPPING = {
+    'notification': Notification,
+    'admincomment': AdminComment,
+    'timerecord': TimeRecord,
+    'employees': Employees
+}
+def getattr_filter(obj, attr):
+    return getattr(obj, attr)
 
+# Register the filter with Jinja2 environment
+app.jinja_env.filters['getattr'] = getattr_filter
 @app.before_request
 def before_request():
     if 'browser_number' not in session:
@@ -281,100 +293,108 @@ def admin_employees():
         return redirect('/admin/login')
     employees = Employees.query.all()
     return render_template('admin/employees.html', employees=employees)
+from datetime import datetime
+
 @admin.route('/add_employees', methods=['GET', 'POST'])
 def add_employees():
     if not session.get('admin'):
         return redirect('/admin/login')
     if request.method == 'POST':
-            name = request.form.get('name')
-            workplace = request.form.get('workplace')
-            position = request.form.get('position')
-            user_id = request.form.get('user_id')
-            date_of_birth = datetime.strptime(request.form.get('date_of_birth'), '%Y-%m-%d').date()
-            gender = request.form.get('gender')
-            marital_status = request.form.get('marital_status')
-            nationality = request.form.get('nationality')
-            address = request.form.get('address')
-            mobile_phone = request.form.get('mobile_phone')
-            home_phone = request.form.get('home_phone')
-            email = request.form.get('email')
-            current_job_title = request.form.get('current_job_title')
-            start_date_current_job = datetime.strptime(request.form.get('start_date_current_job'), '%Y-%m-%d').date()
-            duration_current_job = request.form.get('duration_current_job')
-            previous_job_titles = request.form.get('previous_job_titles')
-            previous_companies = request.form.get('previous_companies')
-            duration_previous_job = request.form.get('duration_previous_job')
-            autocad_proficiency = request.form.get('autocad_proficiency')
-            civil_3d_proficiency = request.form.get('civil_3d_proficiency')
-            total_station_proficiency = request.form.get('total_station_proficiency')
-            gps_proficiency = request.form.get('gps_proficiency')
-            _3d_scanner_proficiency = request.form.get('_3d_scanner_proficiency')
-            data_transfer_software_proficiency = request.form.get('data_transfer_software_proficiency')
-            languages = request.form.get('languages')
-            technical_skills = request.form.get('technical_skills')
-            personal_skills = request.form.get('personal_skills')
-            highest_education_degree = request.form.get('highest_education_degree')
-            field_of_study = request.form.get('field_of_study')
-            educational_institution = request.form.get('educational_institution')
-            graduation_year = datetime.strptime(request.form.get('graduation_year'), '%Y-%m-%d').date()
-            additional_info = request.form.get('additional_info')
-            personal_bank_account_number = request.form.get('personal_bank_account_number')
-            bank_name = request.form.get('bank_name')
-            personal_wallet_number = request.form.get('personal_wallet_number')
-            tax_number = request.form.get('tax_number')
-            social_security_number = request.form.get('social_security_number')
-            emergency_contact_name = request.form.get('emergency_contact_name')
-            emergency_contact_phone = request.form.get('emergency_contact_phone')
+        name = request.form.get('name', '')
+        workplace = request.form.get('workplace', '')
+        position = request.form.get('position', '')
+        user_id = request.form.get('user_id', '')
 
-            employee = Employees(
-                name=name,
-                workplace=workplace,
-                position=position,
-                user_id=user_id,
-                date_of_birth=date_of_birth,
-                gender=gender,
-                marital_status=marital_status,
-                nationality=nationality,
-                address=address,
-                mobile_phone=mobile_phone,
-                home_phone=home_phone,
-                email=email,
-                current_job_title=current_job_title,
-                start_date_current_job=start_date_current_job,
-                duration_current_job=duration_current_job,
-                previous_job_titles=previous_job_titles,
-                previous_companies=previous_companies,
-                duration_previous_job=duration_previous_job,
-                autocad_proficiency=autocad_proficiency,
-                civil_3d_proficiency=civil_3d_proficiency,
-                total_station_proficiency=total_station_proficiency,
-                gps_proficiency=gps_proficiency,
-                _3d_scanner_proficiency=_3d_scanner_proficiency,
-                data_transfer_software_proficiency=data_transfer_software_proficiency,
-                languages=languages,
-                technical_skills=technical_skills,
-                personal_skills=personal_skills,
-                highest_education_degree=highest_education_degree,
-                field_of_study=field_of_study,
-                educational_institution=educational_institution,
-                graduation_year=graduation_year,
-                additional_info=additional_info,
-                personal_bank_account_number=personal_bank_account_number,
-                bank_name=bank_name,
-                personal_wallet_number=personal_wallet_number,
-                tax_number=tax_number,
-                social_security_number=social_security_number,
-                emergency_contact_name=emergency_contact_name,
-                emergency_contact_phone=emergency_contact_phone
-            )
+        # Handle date fields
+        date_of_birth = request.form.get('date_of_birth')
+        start_date_current_job = request.form.get('start_date_current_job')
+        graduation_year = request.form.get('graduation_year')
 
-            db.session.add(employee)
-            db.session.commit()
+        # Convert date strings to Python date objects if not None
+       
 
-            return redirect('/admin/employees')
+        gender = request.form.get('gender', '')
+        marital_status = request.form.get('marital_status', '')
+        nationality = request.form.get('nationality', '')
+        address = request.form.get('address', '')
+        mobile_phone = request.form.get('mobile_phone', '')
+        home_phone = request.form.get('home_phone', '')
+        email = request.form.get('email', '')
+        current_job_title = request.form.get('current_job_title', '')
+        duration_current_job = request.form.get('duration_current_job', '')
+        previous_job_titles = request.form.get('previous_job_titles', '')
+        previous_companies = request.form.get('previous_companies', '')
+        duration_previous_job = request.form.get('duration_previous_job', '')
+        autocad_proficiency = request.form.get('autocad_proficiency', '')
+        civil_3d_proficiency = request.form.get('civil_3d_proficiency', '')
+        total_station_proficiency = request.form.get('total_station_proficiency', '')
+        gps_proficiency = request.form.get('gps_proficiency', '')
+        _3d_scanner_proficiency = request.form.get('_3d_scanner_proficiency', '')
+        data_transfer_software_proficiency = request.form.get('data_transfer_software_proficiency', '')
+        languages = request.form.get('languages', '')
+        technical_skills = request.form.get('technical_skills', '')
+        personal_skills = request.form.get('personal_skills', '')
+        highest_education_degree = request.form.get('highest_education_degree', '')
+        field_of_study = request.form.get('field_of_study', '')
+        educational_institution = request.form.get('educational_institution', '')
+        additional_info = request.form.get('additional_info', '')
+        personal_bank_account_number = request.form.get('personal_bank_account_number', '')
+        bank_name = request.form.get('bank_name', '')
+        personal_wallet_number = request.form.get('personal_wallet_number', '')
+        tax_number = request.form.get('tax_number', '')
+        social_security_number = request.form.get('social_security_number', '')
+        emergency_contact_name = request.form.get('emergency_contact_name', '')
+        emergency_contact_phone = request.form.get('emergency_contact_phone', '')
+
+        employee = Employees(
+            name=name,
+            workplace=workplace,
+            position=position,
+            user_id=user_id,
+            date_of_birth=date_of_birth,
+            gender=gender,
+            marital_status=marital_status,
+            nationality=nationality,
+            address=address,
+            mobile_phone=mobile_phone,
+            home_phone=home_phone,
+            email=email,
+            current_job_title=current_job_title,
+            start_date_current_job=start_date_current_job,
+            duration_current_job=duration_current_job,
+            previous_job_titles=previous_job_titles,
+            previous_companies=previous_companies,
+            duration_previous_job=duration_previous_job,
+            autocad_proficiency=autocad_proficiency,
+            civil_3d_proficiency=civil_3d_proficiency,
+            total_station_proficiency=total_station_proficiency,
+            gps_proficiency=gps_proficiency,
+            _3d_scanner_proficiency=_3d_scanner_proficiency,
+            data_transfer_software_proficiency=data_transfer_software_proficiency,
+            languages=languages,
+            technical_skills=technical_skills,
+            personal_skills=personal_skills,
+            highest_education_degree=highest_education_degree,
+            field_of_study=field_of_study,
+            educational_institution=educational_institution,
+            graduation_year=graduation_year,
+            additional_info=additional_info,
+            personal_bank_account_number=personal_bank_account_number,
+            bank_name=bank_name,
+            personal_wallet_number=personal_wallet_number,
+            tax_number=tax_number,
+            social_security_number=social_security_number,
+            emergency_contact_name=emergency_contact_name,
+            emergency_contact_phone=emergency_contact_phone
+        )
+
+        db.session.add(employee)
+        db.session.commit()
+
+        return redirect('/admin/employees')
 
     return render_template('admin/add_employees.html')
-# /admin/view_record/<int:id> route
+
 @admin.route('/view_record/<int:id>')
 def view_record(id):
     if not session.get('admin'):
@@ -394,20 +414,25 @@ def view_record(id):
 def employee(id):
     if not session.get('admin'):
         return redirect('/admin/login')
+    
     employee = Employees.query.filter_by(id=id).first()
     thisMonthRecords = TimeRecord.query.filter_by(user_id=employee.user_id, month=date.today().month).all()
+    
     workingHours = 0
     totalAttendance = TimeRecord.query.filter_by(user_id=employee.user_id).count()
+    
     for record in thisMonthRecords:
         if record.time_out and record.time_in:
             workingHours += (record.time_out.hour - record.time_in.hour) + (record.time_out.minute - record.time_in.minute) / 60
+    
     context = {
         'employee': employee,
         'workingHours': workingHours,
         'totalAttendance': totalAttendance,
-        'thisMonthRecords': thisMonthRecords
+        'thisMonthRecords': thisMonthRecords,
+        'datetime': datetime
     }
-    return render_template('admin/employee.html', employee=employee)
+    return render_template('admin/employee.html', **context)
 
 @admin.route('/attendance')
 # it will display all the today's attendance and the states for every employee if he attend today or not
@@ -454,7 +479,35 @@ def internal_server_error(e):
     if session.get('admin'):
         return render_template('admin/500.html'), 500
     else:
-        return "500", 500        
+        return "500", 500  
+def get_model_by_name(name):
+    return MODEL_MAPPING.get(name.lower())
+@admin.route('/e/<table>/<int:id>', methods=['GET', 'POST'])
+def edit_record(table, id):
+    if not session.get('admin'):
+        return redirect('/admin/login')
+
+    model = get_model_by_name(table)
+    if not model:
+        return f"Table '{table}' not found", 404
+
+    record = model.query.get_or_404(id)
+    if request.method == 'POST':
+        for field in record.__table__.columns:
+            value = request.form.get(field.name)
+            if value:
+                if isinstance(field.type, db.DateTime):  # Check if the field is DateTime type
+                    try:
+                        value = datetime.strptime(value, '%Y-%m-%d %H:%M:%S')  # Adjust format as needed
+                    except ValueError:
+                        flash(f'Invalid date format for {field.name}. Expected format: YYYY-MM-DD HH:MM:SS', 'error')
+                        return redirect(request.url)
+                setattr(record, field.name, value)
+        db.session.commit()
+        flash(f'{table.capitalize()} record updated successfully!', 'success')
+        return redirect(url_for('dashboard'))
+
+    return render_template('admin/edit.html', record=record, table=table.capitalize())      
 # export the blueprint
 app.register_blueprint(employees, url_prefix='/')
 app.register_blueprint(admin, url_prefix='/admin')
